@@ -1,0 +1,31 @@
+(A) # edges:  56
+(A recon) # edges:  56
+(M) # edges:  325
+
+Tresholding: 5e-05
+Edges Removed: 0
+(Thresholded @ 5e-05) # edges:  325
+
+Tresholding: 0.005
+Edges Removed: 7
+(Thresholded @ 0.005) # edges:  318
+
+Tresholding: 0.05
+Edges Removed: 42
+(Thresholded @ 0.05) # edges:  283
+
+Tresholding: 0.1
+Edges Removed: 70
+(Thresholded @ 0.1) # edges:  255
+
+Tresholding: 0.2
+Edges Removed: 130
+(Thresholded @ 0.2) # edges:  195
+
+Tresholding: 0.3
+Edges Removed: 184
+(Thresholded @ 0.3) # edges:  141
+
+Tresholding: 1
+Edges Removed: 312
+(Thresholded @ 1) # edges:  13
