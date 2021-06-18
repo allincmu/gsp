@@ -1,2 +1,0 @@
-(A) # edges:  159
-max_edge_weight min_edge_weight 1 1
