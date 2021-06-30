@@ -2,6 +2,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from matplotlib import rc
 import numpy
+from numpy.lib.function_base import vectorize
 from scipy.sparse import csr_matrix
 from scipy.sparse.csgraph import reverse_cuthill_mckee
 import random
@@ -9,13 +10,14 @@ import cProfile
 import os
 import sys
 import datetime
+from scipy.sparse.extract import find
 import sympy
 
 folder = ""
 timestamp = ""
 
-NODES = 100
-PROB = 0.03
+NODES = 300
+PROB = 0.05
 SHOW_GRAPHS = True
 
 
@@ -266,6 +268,7 @@ def calc_identity_err(VthTPxV):
 
     err_austin = calc_identity_err_austin_method(VthTPxV)
     err_cm = calc_identity_err_cuthill_mckee_method(VthTPxV)
+    
 
     return err_austin, err_cm
 
@@ -351,6 +354,17 @@ def compare_treshold_to_orig(val_orig, vec_orig, M_tresh, name):
     ax2.set_ylim(-1.1, 1.1)
     fig.savefig(f'compare_tresh_{name}.png')
 
+def find_error(M, Vth, h, Thresholding_string):
+    error = []
+    for i in range(len(Vth)):
+        error += list(abs((numpy.matmul(M, Vth[i]) - numpy.multiply(h[i], Vth[i]))/(NODES**2)))
+    plt.close('all')
+    plt.figure()
+    print(error)
+    plt.hist(error,  bins=20)
+    # plt.show()
+    plt.savefig(f'{folder}errorhist/{timestamp}_NA-{NODES}_ErrorHist_{Thresholding_string.replace(".", "_")}.png')
+
 
 def print_graphs():
 
@@ -394,6 +408,7 @@ def print_graphs():
 (make_dir("GSP", True, True))
 (make_dir(folder + "Angle_Plots"))
 (make_dir(folder + "Max_Val_Plots"))
+(make_dir(folder + "errorhist"))
 redirect_to_file("log") 
 
 
@@ -459,6 +474,9 @@ draw_graph(gft_graph_0_005, f"Thresholded @ {threshold_factor}", True)
 plt.savefig(f'{folder}{timestamp}_NA-{NODES}_M_threshold_0_005.png')
 # plt.show()
 compare_treshold_to_orig(eval_orig, evec_orig, gft_graph_0_005, f"{threshold_factor}")
+val_tresh, vec_tresh = get_evd_of_graph(gft_graph_0_005)
+find_error(M, vec_tresh, eval_orig, f"{threshold_factor}")
+
 
 
 threshold_factor = 0.05
@@ -511,6 +529,7 @@ draw_graph(gft_graph_1, f"Thresholded @ {threshold_factor}", True)
 plt.savefig(f'{folder}{timestamp}_NA-{NODES}_M_threshold_1.png')
 # plt.show()
 compare_treshold_to_orig(eval_orig, evec_orig, gft_graph_1, f"{threshold_factor}")
+
 
 
 
